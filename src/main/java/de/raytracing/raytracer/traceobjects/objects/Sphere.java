@@ -2,6 +2,10 @@ package de.raytracing.raytracer.traceobjects.objects;
 
 import static de.raytracing.raytracer.util.GeometryUtils.isLowerEqZero;
 import static java.lang.Math.sqrt;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import de.raytracing.raytracer.base.CutPoint;
 import de.raytracing.raytracer.base.Ray;
 import de.raytracing.raytracer.base.Vector;
@@ -15,6 +19,8 @@ import de.raytracing.raytracer.util.GeometryUtils;
  * @author daniel
  */
 public class Sphere extends MaterialObject implements TraceObject {
+
+	private final Log log = LogFactory.getLog(getClass());
 
 	private final double radiusSqr;
 	//private final double innerRadiusSqr;
@@ -40,7 +46,7 @@ public class Sphere extends MaterialObject implements TraceObject {
 
 		double rad = dotprod*dotprod - dirsqr * (startsqr - radiusSqr);
 
-		//System.out.println("Sphere dist: ray="+ray+" rad="+rad);
+		if (log.isTraceEnabled()) log.trace("Sphere dist: ray="+ray+" rad="+rad);
 
 		if (rad < 0.0) return new CutPoint[0];
 

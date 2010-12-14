@@ -1,100 +1,81 @@
 package de.raytracing.raytracer.base;
 
 import static de.raytracing.raytracer.base.CutPoint.getNearestCutPoint;
+import static de.raytracing.raytracer.util.MiscUtils.checkParam;
+import static java.lang.Thread.currentThread;
 
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import de.raytracing.raytracer.shader.Shader;
 import de.raytracing.raytracer.traceobjects.base.LightSource;
-import de.raytracing.raytracer.traceobjects.base.TraceObject;
-import de.raytracing.raytracer.traceobjects.csg.Group;
 
 public class Raytracer {
 
-	private Color infiniteColor = Color.Black;
-	private Color defaultColor  = new Color(0.8);
+	private final Log log = LogFactory.getLog(getClass());
 
-	private Camera camera;
-	private double sceneWidth = 10.0;
-	private List<TraceObject> objects = new LinkedList<TraceObject>();
-	private List<LightSource> lights = new LinkedList<LightSource>();
-
-	private int recursionDepth = 5;
-	private TraceObject traceObject;
+	private final RayTraceJob job;
 
 
-	public Raytracer(Camera camera) {
-		setCamera(camera);
-	}
-
-	public void setCamera(Camera camera) {
-		this.camera = camera;
-	}
-
-	public void setSceneWidth(double sceneWidth) {
-		if (sceneWidth <= 0.0) throw new IllegalArgumentException("Invalid width");
-		this.sceneWidth = sceneWidth;
-	}
-
-	public void setInfiniteColor(Color infiniteColor) {
-		this.infiniteColor = infiniteColor;
-	}
-
-	public void setDefaultColor(Color defaultColor) {
-		this.defaultColor = defaultColor;
-	}
-
-	public void setRecursionDepth(int recursionDepth) {
-		this.recursionDepth = recursionDepth;
+	public Raytracer(RayTraceJob job) {
+		checkParam(job, "job");
+		this.job = job;
 	}
 
 
-
-	public void addObjects(TraceObject... objects) {
-		this.objects.addAll(Arrays.asList(objects));
-	}
-
-	public void addLights(LightSource... lights) {
-		this.lights.addAll(Arrays.asList(lights));
-	}
-
-
-	public List<LightSource> getLights() {
-		return lights;
+	public RayTraceJob getRayTraceJob() {
+		return job;
 	}
 
 
 	public void render(int width, int height, RenderCallback callback) {
+		if (width <= 0) throw new IllegalArgumentException("Invalid width: "+width);
+		if (height <= 0) throw new IllegalArgumentException("Invalid height: "+height);
+		checkParam(callback, "callback");
+
+		final double sceneWidth = job.getScene().getSceneWidth();
 		final double sceneHeight = (sceneWidth * height) / width;
 		final double dx = sceneWidth / width;
 		final double dy = -sceneHeight / height;
 		final double x0 = -sceneWidth / 2.0 + dx / 2.0;
 		final double y0 = sceneHeight / 2.0 + dy / 2.0;
+		final int recursionDepth = job.getRecursionDepth();
 
-		this.traceObject = new Group(this.objects.toArray(
-				new TraceObject[this.objects.size()]));
+		if (log.isDebugEnabled()) log.debug("Rendering "+width+"x"+height);
 
-		System.out.println("Rendering "+width+"x"+height);
-
-		for (int x = 0; x < width; x++) {
 		for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
+			if (currentThread().isInterrupted()) {
+				if (log.isDebugEnabled()) {
+					int pc = (int) ((((x+1) * (y+1)) * 100.0) / (width * height));
+					log.debug("Rendering "+width+"x"+height+" interrupted after "+
+							pc+"%, exiting");
+				}
+				return;
+			}
+			Thread.yield();
+
 			// Use reconstruction filter with multiple values per pixel
 			Vector screenPoint = new Vector(x * dx + x0, y * dy + y0, 0);
 
+			// TODO remove debug entry below
 			if (x == 142 && y == 88) {
 				x += 0;
 			}
 
-			Ray initRay = camera.getRay(screenPoint);
+			Ray initRay = job.getScene().getCamera().getRay(screenPoint);
 
 			Color color = trace(initRay, recursionDepth);
 
 			callback.rendered(x, y, color);
 		}
 		}
+
+		if (log.isDebugEnabled()) log.debug("Rendering completed "+width+"x"+height);
 	}
+
 
 	public Color trace(Ray ray, int recursion) {
 		recursion--;
@@ -102,10 +83,10 @@ public class Raytracer {
 		CutPoint cutPoint = getNearestCutPoint(getCutPoints(ray));
 
 		if (cutPoint == null) {
-			return infiniteColor;
+			return job.getInfiniteColor();
 		}
 
-		cutPoint.trySetColor(defaultColor);
+		cutPoint.trySetColor(job.getDefaultColor());
 
 		final Shader shader = new Shader(this, ray, cutPoint);
 
@@ -119,7 +100,11 @@ public class Raytracer {
 	}
 
 	public CutPoint[] getCutPoints(Ray ray) {
-		return traceObject.getCutPoints(ray);
+		return job.getSceneObject().getCutPoints(ray);
+	}
+
+	public List<LightSource> getLightSources() {
+		return job.getScene().getLightSources();
 	}
 
 }

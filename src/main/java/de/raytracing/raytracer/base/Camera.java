@@ -4,9 +4,14 @@ import static java.lang.Math.acos;
 import static java.lang.Math.asin;
 import static java.lang.Math.toDegrees;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class Camera {
 
 	private static final double DEFAULT_FOCAL_DIST = 20.0;
+
+	private final static Log log = LogFactory.getLog(Camera.class);
 
 	private final Vector position;
 	private final double focaldist;
@@ -50,7 +55,9 @@ public class Camera {
 		final double x = asin(-v.y / v.length());
 
 		final Vector rotation = new Vector(toDegrees(x), toDegrees(y), 0);
-		//System.out.println("Created Camera at "+position+" with rotation "+rotation);
+		if (log.isDebugEnabled()) {
+			log.debug("Created Camera at "+position+" with rotation "+rotation);
+		}
 
 		return new Camera(position, rotation);
 	}

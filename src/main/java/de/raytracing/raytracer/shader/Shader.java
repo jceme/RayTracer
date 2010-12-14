@@ -16,15 +16,15 @@ import de.raytracing.raytracer.util.GeometryUtils;
 
 public class Shader {
 
-	private final Raytracer scene;
+	private final Raytracer tracer;
 	private final Ray ray;
 	private final CutPoint cutPoint;
 	private final Vector target;
 	private Material material;
 
 
-	public Shader(Raytracer scene, Ray ray, CutPoint cutPoint) {
-		this.scene = scene;
+	public Shader(Raytracer tracer, Ray ray, CutPoint cutPoint) {
+		this.tracer = tracer;
 		this.ray = ray;
 		this.cutPoint = cutPoint;
 
@@ -47,7 +47,7 @@ public class Shader {
 	private Color getLightsColor() {
 		Color color = Color.Black;
 		Color phongColor = Color.Black;
-		List<LightSource> lights = scene.getLights();
+		List<LightSource> lights = tracer.getLightSources();
 
 		for (LightSource light : lights) {
 			// TODO Transparent shadows by global light tracing from a cutpoint to a light
@@ -110,10 +110,10 @@ public class Shader {
 	private Color getReflection(Color pointColor, int recursion) {
 		double reflection = material.getReflection();
 
-		if (reflection > 0.0 && scene.canRecurse(recursion)) {
+		if (reflection > 0.0 && tracer.canRecurse(recursion)) {
 			Ray reflectRay = getReflectionRay();
 
-			Color reflectColor = scene.trace(reflectRay, recursion);
+			Color reflectColor = tracer.trace(reflectRay, recursion);
 
 			pointColor = pointColor.multiply(1.0 - reflection).add(
 					reflectColor.multiply(reflection));
@@ -142,7 +142,7 @@ public class Shader {
 	private Color getTransparency(Color pointColor, int recursion) {
 		double transparency = material.getTransparency();
 
-		if (transparency > 0.0 && scene.canRecurse(recursion)) {
+		if (transparency > 0.0 && tracer.canRecurse(recursion)) {
 			double fresnel = getFresnelFactor();
 
 			if (GeometryUtils.isGreaterZero(fresnel)) {
@@ -152,7 +152,7 @@ public class Shader {
 				if (!refdir.isZero()) {
 					Ray refractRay = createRay(refdir);
 
-					Color refractColor = scene.trace(refractRay, recursion);
+					Color refractColor = tracer.trace(refractRay, recursion);
 
 					pointColor = pointColor.multiply(1.0 - transparency).add(
 							refractColor.multiply(transparency));
@@ -178,7 +178,7 @@ public class Shader {
 
 
 	private Color getLightColor(LightSource light) {
-		return light.calcLight(target, scene);
+		return light.calcLight(target, tracer);
 	}
 
 }
