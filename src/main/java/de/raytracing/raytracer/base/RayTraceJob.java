@@ -23,6 +23,12 @@ public class RayTraceJob {
 
 	private int recursionDepth = 5;
 
+	private int voxelWidth = 10;
+	private int voxelHeight = voxelWidth;
+
+	private double aliasingCentralWeight = 0.25;
+	private double aliasingEdgeWeight = 0.25;
+
 
 	public RayTraceJob(Scene scene) {
 		checkParam(scene, "scene");
@@ -66,6 +72,43 @@ public class RayTraceJob {
 	public void setRecursionDepth(int depth) {
 		if (depth <= 0) throw new IllegalArgumentException("Invalid recursion depth: "+depth);
 		this.recursionDepth = depth;
+	}
+
+	public int getVoxelWidth() {
+		return voxelWidth;
+	}
+
+	public int getVoxelHeight() {
+		return voxelHeight;
+	}
+
+	public void setVoxel(int width, int height) {
+		if (width <= 0 || height <= 0) {
+			throw new IllegalArgumentException("Invalid voxel: "+width+"x"+height);
+		}
+
+		this.voxelWidth = width;
+		this.voxelHeight = height;
+	}
+
+	public void setVoxel(int length) {
+		setVoxel(length, length);
+	}
+
+	public double getAliasingCentralWeight() {
+		return aliasingCentralWeight;
+	}
+
+	public void setAliasingCentralWeight(double aliasingCentralWeight) {
+		this.aliasingCentralWeight = aliasingCentralWeight;
+	}
+
+	public double getAliasingEdgeWeight() {
+		return aliasingEdgeWeight;
+	}
+
+	public void setAliasingEdgeWeight(double aliasingEdgeWeight) {
+		this.aliasingEdgeWeight = aliasingEdgeWeight;
 	}
 
 }
