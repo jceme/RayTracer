@@ -46,12 +46,10 @@ implements LightSource {
 
 	@Override
 	public Color calcLight(Vector target, Raytracer scene) {
-		Vector position = getLightPosition(target);
-		Vector direction = getDirection(target);
+		final Ray lightRay = getLightRay(target);
+		final double dist = getDirection(target).length();
 
-		Ray lightRay = new Ray(position, direction);
-
-		if (isObjectIntersecting(lightRay, direction, scene)) {
+		if (isObjectIntersecting(lightRay, dist, scene)) {
 			// If some object is placed between cut-point and light
 			// then no light shines on it from this light source
 			return Color.Black;
@@ -63,9 +61,13 @@ implements LightSource {
 	}
 
 
-	protected boolean isObjectIntersecting(Ray lightRay, Vector direction,
-			final Raytracer scene) {
-		final double maxDistance = direction.length() - 2.1 * GeometryUtils.EPSILON;
+	protected Ray getLightRay(Vector target) {
+		return new Ray(getLightPosition(target), getDirection(target));
+	}
+
+
+	protected boolean isObjectIntersecting(Ray lightRay, double maxDistance, final Raytracer scene) {
+		maxDistance -= 2.1 * GeometryUtils.EPSILON;
 		CutPoint[] cutPoints = scene.getCutPoints(lightRay);
 
 		for (CutPoint cutPoint : cutPoints) {
