@@ -25,7 +25,7 @@ public class Gui {
 				//pane.add(panel);
 				frame.add(panel);
 
-				frame.setSize(300, 200);
+				frame.setSize(800, 600);
 				frame.setVisible(true);
 				//frame.pack();
 			}

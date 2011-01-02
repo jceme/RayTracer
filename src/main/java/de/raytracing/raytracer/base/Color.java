@@ -23,12 +23,7 @@ public class Color implements Approximate<Color> {
 	}
 
 	protected Color(Vector color) {
-		this.color = new Vector(
-				// Cut off over-scaled values
-				Math.max(0.0, Math.min(1.0, color.x)),
-				Math.max(0.0, Math.min(1.0, color.y)),
-				Math.max(0.0, Math.min(1.0, color.z))
-		);
+		this.color = color;
 	}
 
 

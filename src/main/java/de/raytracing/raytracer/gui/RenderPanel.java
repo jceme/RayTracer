@@ -41,7 +41,7 @@ public class RenderPanel extends JPanel implements RenderObserver {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (log.isDebugEnabled()) {
+				if (log.isInfoEnabled()) {
 					try {
 						log.info("Clicked at "+e.getX()+", "+e.getY()
 								+": Color is "+new Robot().getPixelColor(e.getXOnScreen(),

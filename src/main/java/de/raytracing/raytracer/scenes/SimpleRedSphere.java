@@ -1,7 +1,6 @@
 package de.raytracing.raytracer.scenes;
 
 import de.raytracing.raytracer.base.Color;
-import de.raytracing.raytracer.base.DefaultScene;
 import de.raytracing.raytracer.traceobjects.base.material.Material;
 import de.raytracing.raytracer.traceobjects.objects.Sphere;
 

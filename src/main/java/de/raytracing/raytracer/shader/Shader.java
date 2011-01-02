@@ -45,7 +45,7 @@ public class Shader {
 
 
 	private Color getLightsColor() {
-		Color color = Color.Black;
+		Color color = getAmbient();
 		Color phongColor = Color.Black;
 		List<LightSource> lights = tracer.getLightSources();
 
@@ -66,9 +66,6 @@ public class Shader {
 
 			color = color.add(lightColor);
 		}
-
-		Color ambient = getAmbient();
-		color = color.add(ambient);
 
 		Color pointColor = material.getColor().multiply(color);
 
