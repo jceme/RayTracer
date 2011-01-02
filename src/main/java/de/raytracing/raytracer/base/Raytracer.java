@@ -70,6 +70,11 @@ public class Raytracer {
 				final double sx = (px + vx) * dx + x0;
 				final double sy = (py + vy) * dy + y0;
 
+				// TODO Debug entry
+				if (px == 371 && py == 465) {
+					x += 0;
+				}
+
 				Vector screenPoint = new Vector(sx, sy, 0);
 
 				Ray initRay = job.getScene().getCamera().getRay(screenPoint);
