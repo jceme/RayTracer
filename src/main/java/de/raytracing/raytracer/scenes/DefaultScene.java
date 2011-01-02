@@ -1,7 +1,10 @@
 package de.raytracing.raytracer.scenes;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 
 import de.raytracing.raytracer.base.Camera;
 import de.raytracing.raytracer.base.Color;
@@ -13,14 +16,36 @@ import de.raytracing.raytracer.traceobjects.light.PointLight;
 
 public class DefaultScene implements Scene {
 
-	private static Scene scene = new SimpleRedSphere();
+	private static final String SCENE_PROPERTIES_NAME = "/scene.properties";
+	private static final String DEFAULT_SCENE_PROP = "default-scene";
 
-	public static Scene getDefaultScene() {
-		return scene;
-	}
 
-	public static void setDefaultScene(Scene scene) {
-		DefaultScene.scene = scene;
+	public static Scene loadDefaultScene() {
+		final Properties props = new Properties();
+		final InputStream propsin = DefaultScene.class.getResourceAsStream(SCENE_PROPERTIES_NAME);
+		if (propsin == null) {
+			throw new IllegalStateException("Missing scene properties "+SCENE_PROPERTIES_NAME);
+		}
+		try {
+			props.load(propsin);
+		} catch (IOException e) {
+			throw new IllegalStateException("Cannot read scene properties", e);
+		}
+
+		final String sceneName = props.getProperty(DEFAULT_SCENE_PROP);
+		if (sceneName == null) throw new IllegalStateException("No default scene set with key "+DEFAULT_SCENE_PROP);
+
+		final String sceneClassName;
+		if (sceneName.contains(".")) sceneClassName = sceneName;
+		else sceneClassName = DefaultScene.class.getPackage().getName() + '.' + sceneName;
+
+		try {
+			Class<?> sceneClass = Class.forName(sceneClassName);
+			return (Scene) sceneClass.newInstance();
+		}
+		catch (Exception e) {
+			throw new IllegalStateException("Failed to load class "+sceneClassName, e);
+		}
 	}
 
 

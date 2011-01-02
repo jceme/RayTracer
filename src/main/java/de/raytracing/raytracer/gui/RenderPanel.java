@@ -1,6 +1,6 @@
 package de.raytracing.raytracer.gui;
 
-import static de.raytracing.raytracer.scenes.DefaultScene.getDefaultScene;
+import static de.raytracing.raytracer.scenes.DefaultScene.loadDefaultScene;
 
 import java.awt.AWTException;
 import java.awt.Graphics;
@@ -63,7 +63,7 @@ public class RenderPanel extends JPanel implements RenderObserver {
 	}
 
 	private Raytracer createRaytracer() {
-		final RayTraceJob job = new RayTraceJob(getDefaultScene());
+		final RayTraceJob job = new RayTraceJob(loadDefaultScene());
 		// Change options here
 
 		return new Raytracer(job);
