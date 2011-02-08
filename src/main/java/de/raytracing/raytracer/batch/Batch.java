@@ -1,12 +1,16 @@
 package de.raytracing.raytracer.batch;
 
+import static de.raytracing.raytracer.batch.BatchRenderer.getSceneName;
 import static de.raytracing.raytracer.scenes.DefaultScene.resolveScene;
 import static java.lang.Integer.parseInt;
 
+import java.io.IOException;
 import java.io.PrintStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import de.raytracing.raytracer.base.Scene;
 
 public class Batch {
 
@@ -24,6 +28,31 @@ public class Batch {
 		}
 
 		if (log.isDebugEnabled()) log.debug("Have scenes: "+request.getScenes());
+
+
+		for (final Scene scene : request.getScenes()) {
+			out.println();
+			out.println("Rendering scene "+getSceneName(scene));
+
+			final BatchRenderer batchRenderer = new BatchRenderer(request.getWidth(),
+					request.getHeight(), scene);
+
+			try {
+				batchRenderer.complete();
+
+				out.println("Rendered scene "+getSceneName(scene));
+			}
+			catch (IOException e) {
+				out.println("Failed to save scene "+getSceneName(scene)+": "+e.getMessage());
+			}
+			catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				break;
+			}
+		}
+
+		out.println();
+		out.println("Render completed");
 	}
 
 

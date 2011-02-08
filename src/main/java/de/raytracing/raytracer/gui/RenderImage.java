@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -80,6 +81,12 @@ public class RenderImage implements RenderCallback {
 			throw new ModifiedDimensionException();
 		}
 
+		synchronized (image) {
+			return image;
+		}
+	}
+
+	public RenderedImage getRenderedImage() {
 		synchronized (image) {
 			return image;
 		}
