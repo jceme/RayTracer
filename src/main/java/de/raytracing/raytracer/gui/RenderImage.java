@@ -23,10 +23,14 @@ public class RenderImage implements RenderCallback {
 
 	private final Thread renderThread;
 
-	private RenderObserver observer;
+	private final RenderObserver observer;
 
 
-	public RenderImage(int width, int height, final Raytracer raytracer) {
+	public RenderImage(int width, int height, Raytracer raytracer) {
+		this(width, height, raytracer, null);
+	}
+
+	public RenderImage(int width, int height, final Raytracer raytracer, RenderObserver observer) {
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		clearImage(raytracer.getRayTraceJob().getInfiniteColor().getAwtColor());
 
@@ -39,10 +43,16 @@ public class RenderImage implements RenderCallback {
 			public void run() {
 				raytracer.render(RenderImage.this.width, RenderImage.this.height,
 						RenderImage.this);
+
+				if (RenderImage.this.observer != null) {
+					RenderImage.this.observer.renderImageFinished();
+				}
 			}
 		};
 
 		if (log.isDebugEnabled()) log.debug("Created render image "+width+"x"+height);
+
+		this.observer = observer;
 
 		renderThread.setDaemon(true);
 		renderThread.setPriority(3);
@@ -58,10 +68,6 @@ public class RenderImage implements RenderCallback {
 		g.clearRect(0, 0, width, height);
 	}
 
-
-	public void setObserver(RenderObserver observer) {
-		this.observer = observer;
-	}
 
 	public boolean check(int width, int height) {
 		return this.width == width || this.height == height;
@@ -83,6 +89,10 @@ public class RenderImage implements RenderCallback {
 	public void abortRendering() {
 		renderThread.interrupt();
 		log.info("Rendering aborted");
+	}
+
+	public void awaitRenderingFinished() throws InterruptedException {
+		renderThread.join();
 	}
 
 

@@ -87,8 +87,7 @@ public class RenderPanel extends JPanel implements RenderObserver {
 			renderImage.abortRendering();
 		}
 
-		renderImage = new RenderImage(width , height, raytracer);
-		renderImage.setObserver(this);
+		renderImage = new RenderImage(width , height, raytracer, this);
 
 		renderCount++;
 
@@ -126,6 +125,11 @@ public class RenderPanel extends JPanel implements RenderObserver {
 	@Override
 	public void renderImageUpdated() {
 		repaint();
+	}
+
+	@Override
+	public void renderImageFinished() {
+		renderImageUpdated();
 	}
 
 }

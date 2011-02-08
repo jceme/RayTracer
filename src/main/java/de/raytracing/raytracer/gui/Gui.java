@@ -20,14 +20,10 @@ public class Gui {
 
 				RenderPanel panel = new RenderPanel();
 
-				//Container pane = frame.getContentPane();
-				//new BoxLayout(pane, BoxLayout.X_AXIS);
-				//pane.add(panel);
 				frame.add(panel);
 
 				frame.setSize(800, 600);
 				frame.setVisible(true);
-				//frame.pack();
 			}
 		});
 	}
