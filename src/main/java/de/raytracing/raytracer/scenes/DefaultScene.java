@@ -35,6 +35,10 @@ public class DefaultScene implements Scene {
 		final String sceneName = props.getProperty(DEFAULT_SCENE_PROP);
 		if (sceneName == null) throw new IllegalStateException("No default scene set with key "+DEFAULT_SCENE_PROP);
 
+		return resolveScene(sceneName);
+	}
+
+	public static Scene resolveScene(final String sceneName) {
 		final String sceneClassName;
 		if (sceneName.contains(".")) sceneClassName = sceneName;
 		else sceneClassName = DefaultScene.class.getPackage().getName() + '.' + sceneName;
