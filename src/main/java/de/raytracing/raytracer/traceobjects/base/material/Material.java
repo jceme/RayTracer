@@ -26,6 +26,20 @@ public class Material extends SimpleMaterial {
 		super(color);
 	}
 
+	public Material(Material material) {
+		super(material);
+
+		setAmbient(material.getAmbient());
+		setDiffuse(material.getDiffuse());
+		setDiffuseExp(material.getDiffuseExp());
+		setPhong(material.getPhong());
+		setPhongExp(material.getPhongExp());
+		setReflection(material.getReflection());
+		setTransparency(material.getTransparency());
+		setRefraction(material.getRefraction());
+		setFresnel(material.getFresnel());
+	}
+
 	public Color getAmbient() {
 		return ambient;
 	}

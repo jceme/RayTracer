@@ -10,8 +10,9 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.raytracing.raytracer.reconstruction.QuincunxReconstructionFilter;
+import de.raytracing.raytracer.reconstruction.QuincunxReconstructionFilterFactory;
 import de.raytracing.raytracer.reconstruction.ReconstructionFilter;
+import de.raytracing.raytracer.reconstruction.ReconstructionFilterFactory;
 import de.raytracing.raytracer.reconstruction.Tracer;
 import de.raytracing.raytracer.shader.Shader;
 import de.raytracing.raytracer.traceobjects.base.LightSource;
@@ -22,10 +23,17 @@ public class Raytracer {
 
 	private final RayTraceJob job;
 
+	private ReconstructionFilterFactory<? extends ReconstructionFilter>
+		reconstructionFilterFactory = new QuincunxReconstructionFilterFactory();
+
 
 	public Raytracer(RayTraceJob job) {
 		checkParam(job, "job");
 		this.job = job;
+	}
+
+	public void setReconstructionFilterFactory(ReconstructionFilterFactory<? extends ReconstructionFilter> reconstructionFilterFactory) {
+		this.reconstructionFilterFactory = reconstructionFilterFactory;
 	}
 
 
@@ -38,6 +46,8 @@ public class Raytracer {
 		if (width <= 0) throw new IllegalArgumentException("Invalid width: "+width);
 		if (height <= 0) throw new IllegalArgumentException("Invalid height: "+height);
 		checkParam(callback, "callback");
+
+		job.getScene().modifyRaytracer(this);
 
 		final double sceneWidth = job.getScene().getSceneWidth();
 		final double sceneHeight = (sceneWidth * height) / width;
@@ -52,9 +62,7 @@ public class Raytracer {
 		final int xVoxels = (int) ceil(width / ((double) voxel.width));
 		final int yVoxels = (int) ceil(height / ((double) voxel.height));
 
-		final ReconstructionFilter filter =
-			new QuincunxReconstructionFilter(job.getAliasingCentralWeight(),
-					job.getAliasingEdgeWeight(), voxel.width, voxel.height);
+		final ReconstructionFilter filter = reconstructionFilterFactory.createFilter(job, voxel);
 
 		final Tracer tracer = new Tracer() {
 

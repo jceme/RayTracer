@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import de.raytracing.raytracer.base.Camera;
 import de.raytracing.raytracer.base.Color;
+import de.raytracing.raytracer.base.Raytracer;
 import de.raytracing.raytracer.base.Scene;
 import de.raytracing.raytracer.base.Vector;
 import de.raytracing.raytracer.traceobjects.base.LightSource;
@@ -130,6 +131,12 @@ public class DefaultScene implements Scene {
 
 	public void clearLightSources() {
 		getLightSources().clear();
+	}
+
+
+	@Override
+	public void modifyRaytracer(Raytracer raytracer) {
+		// Do nothing
 	}
 
 }

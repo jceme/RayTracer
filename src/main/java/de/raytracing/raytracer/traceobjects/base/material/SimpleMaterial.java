@@ -14,6 +14,10 @@ public class SimpleMaterial {
 		setColor(color);
 	}
 
+	public SimpleMaterial(SimpleMaterial material) {
+		this(material.getColor());
+	}
+
 	public void setColor(Color color) {
 		this.color = color;
 	}

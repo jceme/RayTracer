@@ -33,4 +33,17 @@ public class Scale extends MaterialObject implements TraceObject {
 		return object.isInside(point.vectorDivision(scale));
 	}
 
+
+	public static Scale scaleX(double scale, TraceObject object) {
+		return new Scale(new Vector(scale, 1, 1), object);
+	}
+
+	public static Scale scaleY(double scale, TraceObject object) {
+		return new Scale(new Vector(1, scale, 1), object);
+	}
+
+	public static Scale scaleZ(double scale, TraceObject object) {
+		return new Scale(new Vector(1, 1, scale), object);
+	}
+
 }

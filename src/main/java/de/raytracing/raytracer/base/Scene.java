@@ -15,4 +15,6 @@ public interface Scene {
 
 	public List<LightSource> getLightSources();
 
+	public void modifyRaytracer(Raytracer raytracer);
+
 }
