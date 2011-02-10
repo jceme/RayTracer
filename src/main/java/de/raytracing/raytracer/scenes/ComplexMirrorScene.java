@@ -15,9 +15,9 @@ import de.raytracing.raytracer.traceobjects.objects.Cylinder;
 import de.raytracing.raytracer.traceobjects.objects.Plane;
 import de.raytracing.raytracer.traceobjects.objects.Sphere;
 
-public class ComlexMirrorScene extends DefaultScene {
+public class ComplexMirrorScene extends DefaultScene {
 
-	public ComlexMirrorScene() {
+	public ComplexMirrorScene() {
 		final Vector roomdim = new Vector(14, 6, 14);
 		TraceObject room = createRoom(roomdim);
 		addSceneObject(room);
