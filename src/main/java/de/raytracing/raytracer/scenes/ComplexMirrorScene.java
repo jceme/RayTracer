@@ -11,6 +11,7 @@ import de.raytracing.raytracer.traceobjects.csg.Group;
 import de.raytracing.raytracer.traceobjects.light.PointLight;
 import de.raytracing.raytracer.traceobjects.modifier.Translate;
 import de.raytracing.raytracer.traceobjects.objects.Box;
+import de.raytracing.raytracer.traceobjects.objects.Cone;
 import de.raytracing.raytracer.traceobjects.objects.Cylinder;
 import de.raytracing.raytracer.traceobjects.objects.Plane;
 import de.raytracing.raytracer.traceobjects.objects.Sphere;
@@ -19,6 +20,9 @@ public class ComplexMirrorScene extends DefaultScene {
 
 	public ComplexMirrorScene() {
 		final Vector roomdim = new Vector(14, 6, 14);
+		final Vector campos = new Vector(roomdim.x * 0.2, roomdim.y / 2, roomdim.z * -0.2);
+
+
 		TraceObject room = createRoom(roomdim);
 		addSceneObject(room);
 
@@ -50,9 +54,14 @@ public class ComplexMirrorScene extends DefaultScene {
 		obj.setMaterial(material);
 		addSceneObject(obj);
 
+		r = 0.8;
+		obj = new Cone(r, r * 1.2);
+		material = new Material(Color.Red);
+		obj.setMaterial(material);
+		addSceneObject(Translate.moveZ(roomdim.z * -0.48 + r, obj));
 
 
-		Vector campos = new Vector(roomdim.x * 0.2, roomdim.y / 2, roomdim.z * -0.2);
+
 		setCamera(Camera.lookAt(campos, new Vector(roomdim.x * -0.2, roomdim.y / 2, roomdim.z / 2)));
 
 		clearLightSources();

@@ -60,15 +60,18 @@ public class DefaultScene implements Scene {
 	private List<TraceObject> sceneObjects;
 	private List<LightSource> lightSources;
 
+	protected final Vector DEFAULT_CAMERA_POSITION = new Vector(0, 2, -10);
+	protected final Vector DEFAULT_LIGHT_POSITION = new Vector(4, 6, -10);
+
 
 	public DefaultScene() {
-		camera = Camera.lookAt(new Vector(0, 2, -10), Vector.ZERO);
+		camera = Camera.lookAt(DEFAULT_CAMERA_POSITION, Vector.ZERO);
 
 		sceneObjects = new LinkedList<TraceObject>();
 
 		lightSources = new LinkedList<LightSource>();
 
-		lightSources.add(new PointLight(Color.White.multiply(0.8), new Vector(4, 6, -10)));
+		lightSources.add(new PointLight(Color.White.multiply(0.8), DEFAULT_LIGHT_POSITION));
 	}
 
 
