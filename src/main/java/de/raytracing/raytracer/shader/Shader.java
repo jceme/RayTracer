@@ -140,7 +140,15 @@ public class Shader {
 		double transparency = material.getTransparency();
 
 		if (transparency > 0.0 && tracer.canRecurse(recursion)) {
+			Ray transparencyRay = createRay(ray.dir);
+
+			Color transparencyColor = tracer.trace(transparencyRay, recursion);
+
+			pointColor = pointColor.multiply(1.0 - transparency).add(
+					transparencyColor.multiply(transparency));
+			/*
 			double fresnel = getFresnelFactor();
+			fresnel = 1.0;
 
 			if (GeometryUtils.isGreaterZero(fresnel)) {
 				Vector refdir = ray.dir.refract(
@@ -155,12 +163,14 @@ public class Shader {
 							refractColor.multiply(transparency));
 				}
 			}
+			*/
 		}
 
 		return pointColor;
 	}
 
 
+	@SuppressWarnings("unused")
 	private double getFresnelFactor() {
 		double angcos = ray.dir.neg().dot(cutPoint.getNormal());
 

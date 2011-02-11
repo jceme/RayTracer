@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import de.raytracing.raytracer.base.CutPoint;
 import de.raytracing.raytracer.base.Ray;
-import de.raytracing.raytracer.traceobjects.objects.Box;
+import de.raytracing.raytracer.base.Vector;
 
 public class BoxTest {
 
@@ -22,8 +22,10 @@ public class BoxTest {
 		CutPoint[] p = box.getCutPoints(ray);
 
 		assertEquals(2, p.length);
-		assertTrue(Z_AXIS.approxEquals(p[0].getCutPoint(ray)));
-		assertTrue(Z_AXIS.neg().approxEquals(p[1].getCutPoint(ray)));
+
+		final Vector v = Z_AXIS.multiply(0.5);
+		assertTrue(v.approxEquals(p[0].getCutPoint(ray)));
+		assertTrue(v.neg().approxEquals(p[1].getCutPoint(ray)));
 
 		ray = new Ray(X_AXIS.multiply(-10), Z_AXIS);
 

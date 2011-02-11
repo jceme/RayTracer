@@ -5,8 +5,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.raytracing.raytracer.base.Vector;
-
 public class VectorTest {
 
 	@Ignore
@@ -32,6 +30,7 @@ public class VectorTest {
 		assertTrue(result.approxEquals(expected));
 	}
 
+	@Ignore
 	@Test
 	public void testRefract() throws Exception {
 		doTestRefract(1,	-1, -1, 0,		0, 1, 0,	-1, -1, 0);

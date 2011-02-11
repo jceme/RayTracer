@@ -26,7 +26,7 @@ public class Union extends Group {
 			list[i] = filterList(objects[i].getCutPoints(ray), filter);
 		}
 
-		return collectApproxEquals(list);
+		return propagateMaterials(collectApproxEquals(list));
 	}
 
 }

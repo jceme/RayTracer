@@ -26,7 +26,8 @@ public class Translate extends MaterialObject implements TraceObject {
 
 	@Override
 	public boolean isInside(final Vector point) {
-		return object.isInside(point.sub(diff));
+		final Vector modpoint = point.sub(diff);
+		return object.isInside(modpoint);
 	}
 
 	public static Translate move(double x, double y, double z, TraceObject object) {

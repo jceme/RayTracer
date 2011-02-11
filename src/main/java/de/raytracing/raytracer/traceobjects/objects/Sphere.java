@@ -64,7 +64,8 @@ public class Sphere extends MaterialObject implements TraceObject {
 
 	@Override
 	public boolean isInside(final Vector point) {
-		return point.lengthSqr() < radiusSqr; // innerRadiusSqr;
+		final double pointLenSqr = point.lengthSqr();
+		return pointLenSqr < radiusSqr; // innerRadiusSqr;
 	}
 
 	private CutPoint getCutPoint(Ray ray, double dist) {
