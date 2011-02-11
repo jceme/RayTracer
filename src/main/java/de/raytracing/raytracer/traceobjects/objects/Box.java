@@ -17,11 +17,15 @@ public class Box extends Intersection {
 	}
 
 	public Box(Vector point) {
-		this(point, point.neg());
+		this(point.multiply(0.5), point.multiply(0.5).neg());
+	}
+
+	public Box(double size) {
+		this(Vector.ONE.multiply(size));
 	}
 
 	public Box() {
-		this(Vector.ONE);
+		this(1.0);
 	}
 
 

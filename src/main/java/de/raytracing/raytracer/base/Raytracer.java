@@ -16,6 +16,7 @@ import de.raytracing.raytracer.reconstruction.ReconstructionFilterFactory;
 import de.raytracing.raytracer.reconstruction.Tracer;
 import de.raytracing.raytracer.shader.Shader;
 import de.raytracing.raytracer.traceobjects.base.LightSource;
+import de.raytracing.raytracer.traceobjects.base.TraceObject;
 
 public class Raytracer {
 
@@ -79,7 +80,7 @@ public class Raytracer {
 				final double sy = (py + vy) * dy + y0;
 
 				// TODO Debug entry
-				if (px == 371 && py == 465) {
+				if (px == 394 && py == 22) {
 					x += 0;
 				}
 
@@ -161,7 +162,8 @@ public class Raytracer {
 	}
 
 	public CutPoint[] getCutPoints(Ray ray) {
-		return job.getSceneObject().getCutPoints(ray);
+		final TraceObject sceneObject = job.getSceneObject();
+		return sceneObject.getCutPoints(ray);
 	}
 
 	public List<LightSource> getLightSources() {

@@ -35,11 +35,12 @@ public class SpotLight extends BaseLight {
 		setFallOff(DEFAULT_FALLOFF);
 	}
 
-	public void setFallOff(double falloff) {
+	public SpotLight setFallOff(double falloff) {
 		this.falloff = falloff;
+		return this;
 	}
 
-	public void setSpotAngles(double wideSpotAngle, double innerSpotAngle) {
+	public SpotLight setSpotAngles(double wideSpotAngle, double innerSpotAngle) {
 		double wide = toRadians(wideSpotAngle);
 		double inner = toRadians(innerSpotAngle);
 
@@ -49,6 +50,8 @@ public class SpotLight extends BaseLight {
 
 		pitch = 1.0 / (wide - inner);
 		raise = -1.0 / (wide / inner - 1.0);
+
+		return this;
 	}
 
 

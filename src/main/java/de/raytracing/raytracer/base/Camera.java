@@ -62,6 +62,10 @@ public class Camera {
 		return new Camera(position, rotation);
 	}
 
+	public Vector getPosition() {
+		return position;
+	}
+
 
 	public Ray getRay(final Vector screenPoint) {
 		final Vector target = new Vector(screenPoint.x, screenPoint.y, 0.0);

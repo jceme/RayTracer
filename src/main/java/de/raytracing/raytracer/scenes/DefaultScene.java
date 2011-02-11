@@ -137,6 +137,25 @@ public class DefaultScene implements Scene {
 	}
 
 
+	protected void addCameraLight() {
+		addCameraLight(Color.White);
+	}
+
+	protected void addCameraLight(Color color) {
+		addLightSource(new PointLight(color, getCamera().getPosition()));
+	}
+
+	protected void setCameraLight() {
+		clearLightSources();
+		addCameraLight();
+	}
+
+	protected void setCameraLight(Color color) {
+		clearLightSources();
+		addCameraLight(color);
+	}
+
+
 	@Override
 	public void modifyRaytracer(Raytracer raytracer) {
 		// Do nothing

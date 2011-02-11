@@ -21,9 +21,14 @@ public class Scale extends MaterialObject implements TraceObject {
 		this.scale = scale;
 	}
 
+	public Scale(double scale, TraceObject object) {
+		this(new Vector(scale, scale, scale), object);
+	}
+
 	@Override
 	public CutPoint[] getCutPoints(final Ray ray) {
-		final Ray modray = new Ray(ray.start.vectorDivision(scale), ray.dir);
+		//final Ray modray = new Ray(ray.start.vectorDivision(scale), ray.dir);
+		final Ray modray = new Ray(ray.start.vectorDivision(scale), ray.dir.vectorDivision(scale));
 
 		return propagateMaterials(object.getCutPoints(modray));
 	}

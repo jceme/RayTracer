@@ -35,11 +35,9 @@ implements Approximate<CutPoint> {
 
 
 	public CutPoint(double dist, Vector normal, TraceObject object) {
-		if (normal.isZero()) throw new IllegalArgumentException("Invalid normal vector");
-
 		this.dist = dist;
-		this.normal = normal.normalized();
 		this.object = object;
+		setNormal(normal);
 	}
 
 
@@ -75,6 +73,12 @@ implements Approximate<CutPoint> {
 
 	public void flipNormal() {
 		normal = normal.neg();
+	}
+
+	public void setNormal(Vector normal) {
+		if (normal.isZero()) throw new IllegalArgumentException("Invalid normal vector");
+
+		this.normal = normal.normalized();
 	}
 
 	@Override

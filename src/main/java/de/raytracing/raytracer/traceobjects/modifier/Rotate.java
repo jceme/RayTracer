@@ -17,6 +17,7 @@ public class Rotate extends MaterialObject implements TraceObject {
 
 	private final TraceObject object;
 	private final RotationMatrix matrix;
+	private final RotationMatrix revmatrix;
 
 
 	public static Rotate rotX(double angle, TraceObject object) {
@@ -35,12 +36,19 @@ public class Rotate extends MaterialObject implements TraceObject {
 	public Rotate(Vector rotation, TraceObject object) {
 		this.object = object;
 		this.matrix = new RotationMatrix(rotation.neg());
+		this.revmatrix = new RotationMatrix(rotation);
 	}
 
 	@Override
 	public CutPoint[] getCutPoints(final Ray ray) {
-		return propagateMaterials(object.getCutPoints(new Ray(matrix.multiply(ray.start),
-				matrix.multiply(ray.dir))));
+		final Ray rotatedRay = new Ray(matrix.multiply(ray.start), matrix.multiply(ray.dir));
+		final CutPoint[] cutpoints = object.getCutPoints(rotatedRay);
+
+		for (CutPoint p : cutpoints) {
+			p.setNormal(revmatrix.multiply(p.getNormal()));
+		}
+
+		return propagateMaterials(cutpoints);
 	}
 
 	@Override
