@@ -9,6 +9,7 @@ import de.raytracing.raytracer.base.Raytracer;
 import de.raytracing.raytracer.base.Vector;
 import de.raytracing.raytracer.traceobjects.base.LightSource;
 import de.raytracing.raytracer.traceobjects.base.SimpleMaterialObject;
+import de.raytracing.raytracer.traceobjects.base.material.Material;
 import de.raytracing.raytracer.traceobjects.base.material.SimpleMaterial;
 import de.raytracing.raytracer.util.GeometryUtils;
 
@@ -47,39 +48,36 @@ implements LightSource {
 	@Override
 	public Color calcLight(Vector target, Raytracer scene) {
 		final Ray lightRay = getLightRay(target);
-		final double dist = getDirection(target).length();
+		double dist = getDirection(target).length();
 
-		if (isObjectIntersecting(lightRay, dist, scene)) {
-			// If some object is placed between cut-point and light
-			// then no light shines on it from this light source
-			return Color.Black;
+		Color color = getFinalMaterial().getColor();
+
+		dist -= 2.1 * GeometryUtils.EPSILON;
+
+		final CutPoint[] cutPoints = scene.getCutPoints(lightRay);
+
+		for (final CutPoint cutPoint : cutPoints) {
+			final double distance = cutPoint.getDistance();
+			final double diff = distance - dist;
+
+			if (isGreaterZero(distance) && isLowerEqZero(diff)) {
+				// Object in light ray
+				Material pointMaterial = cutPoint.getFinalMaterial();
+				double transparency = pointMaterial.getTransparency();
+				Color pointColor = pointMaterial.getColor();
+
+				color = color.multiply(pointColor).multiply(transparency);
+			}
 		}
 
 		// TODO Introduce light fading
 
-		return getFinalMaterial().getColor();
+		return color;
 	}
 
 
 	protected Ray getLightRay(Vector target) {
 		return new Ray(getLightPosition(target), getDirection(target));
-	}
-
-
-	private boolean isObjectIntersecting(Ray lightRay, double maxDistance, final Raytracer scene) {
-		maxDistance -= 2.1 * GeometryUtils.EPSILON;
-		CutPoint[] cutPoints = scene.getCutPoints(lightRay);
-
-		for (CutPoint cutPoint : cutPoints) {
-			final double distance = cutPoint.getDistance();
-			double diff = distance - maxDistance;
-
-			if (isGreaterZero(distance) && isLowerEqZero(diff)) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 
