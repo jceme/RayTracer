@@ -25,7 +25,7 @@ public class RenderPanel extends JPanel implements RenderObserver {
 
 	private final Log log = LogFactory.getLog(getClass());
 
-	private RenderImage renderImage;
+	private transient RenderImage renderImage;
 	private final Raytracer raytracer;
 
 	private int renderCount = 0;

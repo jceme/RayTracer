@@ -13,7 +13,7 @@ import de.raytracing.raytracer.base.Color;
 import de.raytracing.raytracer.base.Raytracer;
 import de.raytracing.raytracer.base.RenderCallback;
 
-public class RenderImage implements RenderCallback {
+public final class RenderImage implements RenderCallback {
 
 	private final Log log = LogFactory.getLog(getClass());
 

@@ -7,6 +7,7 @@ import de.raytracing.raytracer.base.Vector;
 import de.raytracing.raytracer.traceobjects.base.MaterialObject;
 import de.raytracing.raytracer.traceobjects.base.TraceObject;
 
+@Deprecated
 public class Scale extends MaterialObject implements TraceObject {
 
 	private final TraceObject object;

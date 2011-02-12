@@ -79,10 +79,11 @@ public class Raytracer {
 				final double sx = (px + vx) * dx + x0;
 				final double sy = (py + vy) * dy + y0;
 
-				// TODO Debug entry
+				/*// TODO Debug entry
 				if (px == 394 && py == 22) {
 					x += 0;
 				}
+				*/
 
 				Vector screenPoint = new Vector(sx, sy, 0);
 

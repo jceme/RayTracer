@@ -12,13 +12,13 @@ import de.raytracing.raytracer.traceobjects.base.SimpleMaterialObject;
 import de.raytracing.raytracer.traceobjects.base.material.SimpleMaterial;
 import de.raytracing.raytracer.util.GeometryUtils;
 
-public abstract class BaseLight extends SimpleMaterialObject<SimpleMaterial>
+abstract class BaseLight extends SimpleMaterialObject<SimpleMaterial>
 implements LightSource {
 
 	private Vector location;
 
 
-	public BaseLight(Color color, Vector location) {
+	protected BaseLight(Color color, Vector location) {
 		if (color == null) throw new IllegalArgumentException("Invalid light color");
 		if (location == null) throw new IllegalArgumentException("Invalid location");
 
@@ -66,7 +66,7 @@ implements LightSource {
 	}
 
 
-	protected boolean isObjectIntersecting(Ray lightRay, double maxDistance, final Raytracer scene) {
+	private boolean isObjectIntersecting(Ray lightRay, double maxDistance, final Raytracer scene) {
 		maxDistance -= 2.1 * GeometryUtils.EPSILON;
 		CutPoint[] cutPoints = scene.getCutPoints(lightRay);
 
@@ -83,7 +83,7 @@ implements LightSource {
 	}
 
 
-	protected Vector getLightPosition(Vector target) {
+	private Vector getLightPosition(Vector target) {
 		return getLightLocation();
 	}
 

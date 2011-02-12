@@ -1,5 +1,6 @@
 package de.raytracing.raytracer.base;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -11,7 +12,10 @@ import de.raytracing.raytracer.util.GeometryUtils;
 public class CutPoint extends MaterialObject
 implements Approximate<CutPoint> {
 
-	public static class CutPointNearestComparator implements Comparator<CutPoint> {
+	public static class CutPointNearestComparator
+	implements Comparator<CutPoint>, Serializable {
+
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		public int compare(CutPoint p1, CutPoint p2) {

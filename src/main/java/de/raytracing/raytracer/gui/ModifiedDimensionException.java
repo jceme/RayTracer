@@ -1,6 +1,6 @@
 package de.raytracing.raytracer.gui;
 
-public class ModifiedDimensionException extends Exception {
+class ModifiedDimensionException extends Exception {
 
 	private static final long serialVersionUID = 5592569624514607177L;
 
