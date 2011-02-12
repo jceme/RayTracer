@@ -17,6 +17,7 @@ abstract class BaseLight extends SimpleMaterialObject<SimpleMaterial>
 implements LightSource {
 
 	private Vector location;
+	private LightFading fading;
 
 
 	protected BaseLight(Color color, Vector location) {
@@ -34,6 +35,11 @@ implements LightSource {
 	}
 
 	@Override
+	public void setFading(LightFading fading) {
+		this.fading = fading;
+	}
+
+	@Override
 	public void setMaterial(SimpleMaterial material) {
 		if (material == null) throw new IllegalArgumentException("Material required");
 
@@ -46,13 +52,13 @@ implements LightSource {
 	}
 
 	@Override
-	public Color calcLight(Vector target, Raytracer scene) {
+	public Color calcLight(final Vector target, final Raytracer scene) {
 		final Ray lightRay = getLightRay(target);
-		double dist = getDirection(target).length();
+		final double lightdist = getDirection(target).length();
 
 		Color color = getFinalMaterial().getColor();
 
-		dist -= 2.1 * GeometryUtils.EPSILON;
+		final double dist = lightdist - 2.1 * GeometryUtils.EPSILON;
 
 		final CutPoint[] cutPoints = scene.getCutPoints(lightRay);
 
@@ -73,7 +79,10 @@ implements LightSource {
 			}
 		}
 
-		// TODO Introduce light fading
+		// Light fading
+		LightFading fading = this.fading == null ? scene.getLightFading() : this.fading;
+		double fadingFactor = fading.getFading(lightdist);
+		color = color.multiply(fadingFactor);
 
 		return color;
 	}

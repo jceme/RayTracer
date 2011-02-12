@@ -6,6 +6,7 @@ import java.util.List;
 
 import de.raytracing.raytracer.traceobjects.base.TraceObject;
 import de.raytracing.raytracer.traceobjects.csg.Group;
+import de.raytracing.raytracer.traceobjects.light.LightFading;
 
 public class RayTraceJob {
 
@@ -28,6 +29,8 @@ public class RayTraceJob {
 
 	private double aliasingCentralWeight = 0.25;
 	private double aliasingEdgeWeight = 0.25;
+
+	private LightFading lightFading = LightFading.createConstantFading();
 
 
 	public RayTraceJob(Scene scene) {
@@ -109,6 +112,15 @@ public class RayTraceJob {
 
 	public void setAliasingEdgeWeight(double aliasingEdgeWeight) {
 		this.aliasingEdgeWeight = aliasingEdgeWeight;
+	}
+
+	public LightFading getLightFading() {
+		return lightFading;
+	}
+
+	public void setLightFading(LightFading lightFading) {
+		if (lightFading == null) throw new IllegalArgumentException("Fading required");
+		this.lightFading = lightFading;
 	}
 
 }

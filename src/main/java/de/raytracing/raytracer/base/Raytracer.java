@@ -17,6 +17,7 @@ import de.raytracing.raytracer.reconstruction.Tracer;
 import de.raytracing.raytracer.shader.Shader;
 import de.raytracing.raytracer.traceobjects.base.LightSource;
 import de.raytracing.raytracer.traceobjects.base.TraceObject;
+import de.raytracing.raytracer.traceobjects.light.LightFading;
 
 public class Raytracer {
 
@@ -169,6 +170,10 @@ public class Raytracer {
 
 	public List<LightSource> getLightSources() {
 		return job.getScene().getLightSources();
+	}
+
+	public LightFading getLightFading() {
+		return job.getLightFading();
 	}
 
 }

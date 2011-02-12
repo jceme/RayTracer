@@ -5,6 +5,7 @@ import de.raytracing.raytracer.base.Raytracer;
 import de.raytracing.raytracer.base.Vector;
 import de.raytracing.raytracer.traceobjects.base.material.Materialed;
 import de.raytracing.raytracer.traceobjects.base.material.SimpleMaterial;
+import de.raytracing.raytracer.traceobjects.light.LightFading;
 
 public interface LightSource extends Materialed<SimpleMaterial> {
 
@@ -13,5 +14,7 @@ public interface LightSource extends Materialed<SimpleMaterial> {
 	public Color calcLight(Vector target, Raytracer scene);
 
 	public Vector getDirection(Vector target);
+
+	public void setFading(LightFading fading);
 
 }
