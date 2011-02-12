@@ -66,7 +66,10 @@ implements LightSource {
 				double transparency = pointMaterial.getTransparency();
 				Color pointColor = pointMaterial.getColor();
 
-				color = color.multiply(pointColor).multiply(transparency);
+				Color filterColor = new Color(transparency).add(
+						pointColor.multiply(1 - transparency));
+
+				color = color.multiply(filterColor).multiply(transparency);
 			}
 		}
 
