@@ -4,11 +4,12 @@ import de.raytracing.raytracer.base.Camera;
 import de.raytracing.raytracer.base.Color;
 import de.raytracing.raytracer.base.Raytracer;
 import de.raytracing.raytracer.base.Vector;
-import de.raytracing.raytracer.reconstruction.SimpleReconstructionFilterFactory;
 import de.raytracing.raytracer.traceobjects.base.TraceObject;
 import de.raytracing.raytracer.traceobjects.base.material.Material;
 import de.raytracing.raytracer.traceobjects.csg.Group;
+import de.raytracing.raytracer.traceobjects.csg.Union;
 import de.raytracing.raytracer.traceobjects.light.PointLight;
+import de.raytracing.raytracer.traceobjects.modifier.Rotate;
 import de.raytracing.raytracer.traceobjects.modifier.Translate;
 import de.raytracing.raytracer.traceobjects.objects.Box;
 import de.raytracing.raytracer.traceobjects.objects.Cone;
@@ -21,14 +22,16 @@ public class ComplexMirrorScene extends DefaultScene {
 	public ComplexMirrorScene() {
 		final Vector roomdim = new Vector(14, 6, 14);
 		final Vector campos = new Vector(roomdim.x * 0.2, roomdim.y / 2, roomdim.z * -0.2);
-
+		TraceObject obj;
+		Material material;
+		double r;
 
 		TraceObject room = createRoom(roomdim);
 		addSceneObject(room);
 
-		double r = roomdim.y * 0.45;
-		TraceObject obj = new Sphere(r);
-		Material material = new Material(Color.Blue);
+		r = roomdim.y * 0.45;
+		obj = new Sphere(r);
+		material = new Material(Color.Blue);
 		material.setReflection(0.4);
 		obj.setMaterial(material);
 		addSceneObject(Translate.move(roomdim.x / -2 + r, r, roomdim.z / 2 - r, obj));
@@ -60,9 +63,16 @@ public class ComplexMirrorScene extends DefaultScene {
 		obj.setMaterial(material);
 		addSceneObject(Translate.moveZ(roomdim.z * -0.48 + r, obj));
 
+		obj = createQuyphus(1.5, 3);
+		material = new Material(Color.White);
+		material.setReflection(0.8);
+		material.setTransparency(0.5);
+		obj.setMaterial(material);
+		addSceneObject(Translate.move(1.5, 0, 1, obj));
 
 
-		setCamera(Camera.lookAt(campos, new Vector(roomdim.x * -0.2, roomdim.y / 2, roomdim.z / 2)));
+
+		setCamera(Camera.lookAt(campos, new Vector(roomdim.x * -0.25, roomdim.y / 2, roomdim.z / 2)));
 
 		clearLightSources();
 		addLightSource(new PointLight(new Color(1), new Vector(0, roomdim.y - 1, 0)));
@@ -85,7 +95,6 @@ public class ComplexMirrorScene extends DefaultScene {
 
 		Material material = new Material(new Color(0.6));
 		material.setPhong(0);
-		//material.setAmbient(new Color(0.06));
 		room.setMaterial(material);
 
 		material = new Material(material);
@@ -96,12 +105,26 @@ public class ComplexMirrorScene extends DefaultScene {
 	}
 
 
+	private TraceObject createQuyphus(double radius, double height) {
+		TraceObject cone = new Cone(radius, height);
+		cone = Translate.moveY(height, Rotate.rotX(180, cone));
+
+		double pitch = height / radius;
+		double sradius = radius * Math.sqrt(1.0 + pitch*pitch) / pitch;
+		double sd = Math.sqrt(sradius*sradius / (1.0 + pitch*pitch));
+
+		TraceObject sphere = new Sphere(sradius);
+		sphere = Translate.moveY(sd + height, sphere);
+
+		return new Union(cone, sphere);
+	}
+
 	@Override
 	public void modifyRaytracer(Raytracer raytracer) {
 		super.modifyRaytracer(raytracer);
-		// TODO remove
-		raytracer.setReconstructionFilterFactory(new SimpleReconstructionFilterFactory());
+
 		raytracer.getRayTraceJob().setRecursionDepth(8);
+		raytracer.getRayTraceJob().setVoxel(400);
 	}
 
 }
