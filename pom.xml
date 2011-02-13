@@ -14,8 +14,65 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>false</addClasspath>
+							<mainClass>de.raytracing.raytracer.gui.Gui</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRefs>jar-with-dependencies</descriptorRefs>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>batch</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>2.2</version>
+						<configuration>
+							<archive>
+								<manifest>
+									<addClasspath>false</addClasspath>
+									<mainClass>de.raytracing.raytracer.batch.Batch</mainClass>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								<descriptorRefs>jar-with-dependencies</descriptorRefs>
+							</descriptorRefs>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>

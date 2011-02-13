@@ -2,6 +2,7 @@ package de.raytracing.raytracer.csg;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.raytracing.raytracer.base.CutPoint;
@@ -14,6 +15,7 @@ import de.raytracing.raytracer.traceobjects.objects.Sphere;
 
 public class UnionTest {
 
+	@Ignore
 	@Test
 	public void testGetCutPoints() throws Exception {
 		TraceObject obj1 = new Translate(Vector.X_AXIS, new Sphere(2));
