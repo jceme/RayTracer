@@ -5,8 +5,19 @@ import javax.swing.SwingUtilities;
 
 public class Gui {
 
+	private static String sceneName;
+
+
 	public static void main(String[] args) {
+		if (args.length > 0) {
+			sceneName = args[0];
+		}
+
 		new Gui();
+	}
+
+	public static String getSceneName() {
+		return sceneName;
 	}
 
 

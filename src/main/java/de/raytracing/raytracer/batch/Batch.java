@@ -6,6 +6,7 @@ import static java.lang.Integer.parseInt;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Locale;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,8 +32,11 @@ public class Batch {
 
 
 		for (final Scene scene : request.getScenes()) {
-			out.println();
-			out.println("Rendering scene "+getSceneName(scene));
+			out.println("Rendering scene "+getSceneName(scene)+" ...");
+
+			String format = request.getWidth()+"x"+request.getHeight();
+
+			double renderTime = System.currentTimeMillis();
 
 			final BatchRenderer batchRenderer = new BatchRenderer(request.getWidth(),
 					request.getHeight(), scene);
@@ -40,7 +44,11 @@ public class Batch {
 			try {
 				batchRenderer.complete();
 
-				out.println("Rendered scene "+getSceneName(scene));
+				renderTime = System.currentTimeMillis() - renderTime;
+
+				out.println(String.format(Locale.ENGLISH, "Rendered scene %s (%s) in %.1f s",
+						getSceneName(scene), format, renderTime / 1000));
+				out.println();
 			}
 			catch (IOException e) {
 				out.println("Failed to save scene "+getSceneName(scene)+": "+e.getMessage());
@@ -51,7 +59,6 @@ public class Batch {
 			}
 		}
 
-		out.println();
 		out.println("Render completed");
 	}
 

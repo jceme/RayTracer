@@ -18,6 +18,8 @@ import org.apache.commons.logging.LogFactory;
 
 import de.raytracing.raytracer.base.RayTraceJob;
 import de.raytracing.raytracer.base.Raytracer;
+import de.raytracing.raytracer.base.Scene;
+import de.raytracing.raytracer.scenes.DefaultScene;
 
 public class RenderPanel extends JPanel implements RenderObserver {
 
@@ -61,7 +63,11 @@ public class RenderPanel extends JPanel implements RenderObserver {
 	}
 
 	private Raytracer createRaytracer() {
-		final RayTraceJob job = new RayTraceJob(loadDefaultScene());
+		final Scene scene;
+		if (Gui.getSceneName() == null) scene = loadDefaultScene();
+		else scene = DefaultScene.resolveScene(Gui.getSceneName());
+
+		final RayTraceJob job = new RayTraceJob(scene);
 		// Change options here
 
 		return new Raytracer(job);
