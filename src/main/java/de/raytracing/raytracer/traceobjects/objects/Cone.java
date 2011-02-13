@@ -12,7 +12,7 @@ import de.raytracing.raytracer.traceobjects.csg.Difference;
 
 public class Cone extends Difference {
 
-	public static class InfiniteCone extends MaterialObject implements TraceObject {
+	private static class InfiniteCone extends MaterialObject implements TraceObject {
 
 		private final double radius;
 		private final double height;

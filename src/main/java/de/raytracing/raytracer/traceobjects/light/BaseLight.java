@@ -68,6 +68,8 @@ implements LightSource {
 
 			if (isGreaterZero(distance) && isLowerEqZero(diff)) {
 				// Object in light ray
+				cutPoint.trySetColor(scene.getRayTraceJob().getDefaultColor());
+
 				Material pointMaterial = cutPoint.getFinalMaterial();
 				double transparency = pointMaterial.getTransparency();
 				Color pointColor = pointMaterial.getColor();
